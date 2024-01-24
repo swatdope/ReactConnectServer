@@ -55,6 +55,23 @@ const App = () => {
       });
   };
 
+  const updateUser = (user: User) => {
+    const originalUser = [...users];
+    // update the ui
+    const updatedUser = { ...user, name: user.name + "!" };
+    setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
+    // call the server
+    axios
+      .patch(
+        "https://jsonplaceholder.typicode.com/users/" + user.id,
+        updateUser
+      )
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUser);
+      });
+  };
+
   return (
     <>
       {error && <p className="text-danger">{error} </p>}
@@ -69,6 +86,12 @@ const App = () => {
             className="list-group-item d-flex justify-content-between align-items-center "
           >
             {u.name}
+            <button
+              onClick={() => updateUser(u)}
+              className="btn btn-outline-secondary"
+            >
+              Update
+            </button>
             <button onClick={() => deleteUser(u)} className="btn btn-danger">
               Delete
             </button>
