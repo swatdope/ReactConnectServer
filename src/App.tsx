@@ -36,7 +36,19 @@ const App = () => {
     setUsers(users.filter((u) => u.id !== user.id));
     // Call the server
     axios
-      .delete("https://jsonplaceholder.typicode.com/usersx/" + user.id)
+      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUser);
+      });
+  };
+  const addUser = () => {
+    const originalUser = [...users];
+    const newUser = { id: 1, name: "tenzin" };
+    setUsers([newUser, ...users]);
+    axios
+      .post("https://jsonplaceholder.typicode.com/users", newUser)
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
         setUsers(originalUser);
@@ -47,6 +59,9 @@ const App = () => {
     <>
       {error && <p className="text-danger">{error} </p>}
       {isloading && <p className="text-danger">LOADING ...</p>}
+      <button onClick={addUser} className="btn btn-primary mt-2 mb-2 ">
+        Add
+      </button>
       <ul className="list-group">
         {users.map((u) => (
           <li
