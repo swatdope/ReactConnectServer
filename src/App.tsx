@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductList from "./components/ProductList";
 
 const App = () => {
   const [category, setCategory] = useState("");
+
+  const connect = () => console.log("connecting");
+  const disconnect = () => console.log("disconnecting");
+
+  useEffect(() => {
+    connect();
+
+    return () => disconnect();
+  });
 
   return (
     <>
